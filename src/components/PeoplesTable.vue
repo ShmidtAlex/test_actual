@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="table" style="width: 100%">
+    <div class="table" style="overfolw: hidden; width: 100%">
       <hot-table licenseKey="non-commercial-and-evaluation" ref="hotTableComponent" :settings="hotSettings">
       </hot-table>
     </div>
@@ -17,56 +17,22 @@
 <script>
 import { HotTable, HotColumn } from "@handsontable/vue";
 import Handsontable from 'handsontable';
-//ЭТО ДЛЯ ТЕСТИРОВАНИЯ, СТАТИЧЕСКИЙ ОБЪЕКТ
-// let dataObject = [
-  // {
-  //   id: 1,
-  //   name: "Leanne Graham",
-  //   username: "Bret",
-  //   email: "Sincere@april.biz",
-  //   address: {
-  //     street: "Kulas Light",
-  //     suite: "Apt. 556",
-  //     city: "Gwenborough",
-  //     zipcode: "92998-3874",
-  //     geo: {
-  //       lat: "-37.3159",
-  //       lng: "81.1496"
-  //     }
-  //   },
-  //   phone: "1-770-736-8031 x56442",
-  //   website: "hildegard.org",
-  //   company: {
-  //     name: "Romaguera-Crona",
-  //     catchPhrase: "Multi-layered client-server neural-net",
-  //     bs: "harness real-time e-markets"
-  //   }
-  // },
-  // {
-  //   id: 2,
-  //   name: "Ervin Howell",
-  //   username: "Antonette",
-  //   email: "Shanna@melissa.tv",
-  //   address: {
-  //     street: "Victor Plains",
-  //     suite: "Suite 879",
-  //     city: "Wisokyburgh",
-  //     zipcode: "90566-7771",
-  //     geo: {
-  //       lat: "-43.9509",
-  //       lng: "-34.4618"
-  //     }
-  //   },
-  //   phone: "010-692-6593 x09125",
-  //   website: "anastasia.net",
-  //   // company: {
-  //     name: "Deckow-Crist",
-  //     catchPhrase: "Proactive didactic contingency",
-  //     bs: "synergize scalable supply-chains"
-  //   }
-  // },
-//   
-// ]
+class CustomEditor extends Handsontable.editors.TextEditor {
+    constructor(props) {
+      super(props);
+    }
+  
+    createElements() {
+      super.createElements();
+  
+      this.TEXTAREA = document.createElement('input');
+      this.TEXTAREA.setAttribute('placeholder', 'Custom placeholder');
+      this.TEXTAREA.className = 'handsontableInput';
+      this.textareaStyle = this.TEXTAREA.style;
+      Handsontable.dom.empty(this.TEXTAREA_PARENT);
+      this.TEXTAREA_PARENT.appendChild(this.TEXTAREA);
+    }
+  }
 export default {
   name: "PeoplesTable",
   // props: [ 'dataObject' ],
@@ -81,39 +47,37 @@ export default {
       hotSettings: {
         rowHeaders: true,
         columns: [
+          { data: 'name', type: 'text' }, { data: 'username', type: 'text' }, { data: 'email', type: 'text' },
+          { data: 'phone',  type: 'text' }, { data: 'website', type: 'text' }, {  data: 'company.name', type: 'text' },
+          { data: 'company.catchPhrase',  type: 'text' }, { data: 'company.bs', type: 'text' }, { data: 'address.city', type: 'text' },
+          { data: 'address.street', type: 'text' }, { data: 'address.suite', type: 'text' }, 
+          { data: 'address.zipcode', type: 'text' }, 
           {
-            data: 'name',
-            type: 'text'
-          },
-          {
-            data: 'username',
-            type: 'text'
-          },
-          {
-            data: 'email',
-            type: 'text'
-          },
-          {
-            data: 'phone',
-            type: 'text'
-          },
-          {
-            data: 'website',
-            type: 'text'
-          },
+            editor: CustomEditor,
+          }
         ],
         stretchH: 'all',
         width: "100%",
         autoWrapRow: true,
         height: 487,
-        maxRows: 22,
-        rowHeaders: true,
+        maxRows: 6,
+        colWidths: 100,
+        rowHeights: 23,
+        // manualColumnResize: true,
+        // manualRowResize: true,
         colHeaders: [
           'Name',
           'Username',
           'Email',
           'Phone',
-          'Website'
+          'Website',
+          'Company Name',
+          'Catch Phrase',
+          'BS',
+          'City',
+          'Street',
+          'Suite',
+          'Zipcode'
         ]
       },
     }
@@ -121,7 +85,7 @@ export default {
   methods: {
     recieveData: function() {
       this.axios.get('https://jsonplaceholder.typicode.com/users').then((response) => {
-        // console.log( response.data);
+        console.log( response.data);
         var data = response.data;
          // console.log( data);
         this.$refs.hotTableComponent.hotInstance.loadData(data);
