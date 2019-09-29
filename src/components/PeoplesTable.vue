@@ -4,7 +4,6 @@
       <hot-table licenseKey="non-commercial-and-evaluation" ref="hotTableComponent" :settings="hotSettings">
       </hot-table>
     </div>
-    <!-- <div>{{dataObject}}</div> -->
     <div class="buttons_block">
       <button @click="recieveData" class="people_btn">загрузить с сервера</button>
       <button class="people_btn">загрузить на сервер</button>
@@ -17,26 +16,9 @@
 <script>
 import { HotTable, HotColumn } from "@handsontable/vue";
 import Handsontable from 'handsontable';
-class CustomEditor extends Handsontable.editors.TextEditor {
-    constructor(props) {
-      super(props);
-    }
-  
-    createElements() {
-      super.createElements();
-  
-      this.TEXTAREA = document.createElement('input');
-      this.TEXTAREA.setAttribute('placeholder', 'Custom placeholder');
-      this.TEXTAREA.className = 'handsontableInput';
-      this.textareaStyle = this.TEXTAREA.style;
-      Handsontable.dom.empty(this.TEXTAREA_PARENT);
-      this.TEXTAREA_PARENT.appendChild(this.TEXTAREA);
-    }
-  }
+
 export default {
   name: "PeoplesTable",
-  // props: [ 'dataObject' ],
-  // extends: BaseEditorComponent,
   components: {
     HotTable,
     HotColumn,
@@ -52,19 +34,12 @@ export default {
           { data: 'company.catchPhrase',  type: 'text' }, { data: 'company.bs', type: 'text' }, { data: 'address.city', type: 'text' },
           { data: 'address.street', type: 'text' }, { data: 'address.suite', type: 'text' }, 
           { data: 'address.zipcode', type: 'text' }, 
-          {
-            editor: CustomEditor,
-          }
         ],
         stretchH: 'all',
         width: "100%",
         autoWrapRow: true,
         height: 487,
         maxRows: 6,
-        colWidths: 100,
-        rowHeights: 23,
-        // manualColumnResize: true,
-        // manualRowResize: true,
         colHeaders: [
           'Name',
           'Username',
@@ -87,7 +62,6 @@ export default {
       this.axios.get('https://jsonplaceholder.typicode.com/users').then((response) => {
         console.log( response.data);
         var data = response.data;
-         // console.log( data);
         this.$refs.hotTableComponent.hotInstance.loadData(data);
       })
     }
@@ -155,8 +129,4 @@ export default {
       }
     }
   }
-  
-  // .wtSpreader {
-  //   width: 100% !important;
-  // }
 </style>
