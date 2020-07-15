@@ -1,7 +1,11 @@
 # test_task for publics group (media business)
 
 ## notice: 
-	the hard part of test task was that it was necessary to use extra and little-known library (handsontable). this library seemd to hard for quick dive and it was strongly necessary to use it in test task.
+	the hard part of test task was that it was necessary to use extra and 
+	little-known library (handsontable). this library seemd to hard for 
+	quick dive and it was strongly necessary to use it in test task. 
+	additionaly, the task description was lost, so there is no possibility 
+	to finish it.
 
 ## Project setup
 ```
